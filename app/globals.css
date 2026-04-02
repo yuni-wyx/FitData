@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 44 100% 97%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --primary: 19 91% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 47 96% 89%;
+    --secondary-foreground: 24 50% 20%;
+    --accent: 142 76% 94%;
+    --accent-foreground: 145 63% 20%;
+    --muted: 46 67% 93%;
+    --muted-foreground: 215 16% 35%;
+    --border: 36 49% 84%;
+    --input: 36 49% 84%;
+    --ring: 19 91% 48%;
+    --radius: 1rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply min-h-screen bg-background font-sans text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(251, 191, 36, 0.22), transparent 22%),
+      radial-gradient(circle at bottom right, rgba(249, 115, 22, 0.18), transparent 20%),
+      linear-gradient(180deg, #fffdf7 0%, #fef6dd 100%);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

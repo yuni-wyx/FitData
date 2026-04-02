@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum FitPreference {
+  FITTED
+  LOOSE
+}
+
+model Brand {
+  id         String      @id @default(cuid())
+  name       String      @unique
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+  sizeCharts SizeChart[]
+
+  @@map("brands")
+}
+
+model SizeChart {
+  id         String   @id @default(cuid())
+  brandId    String   @map("brand_id")
+  category   String
+  sizeLabel  String   @map("size_label")
+
+  chestMin   Float?   @map("chest_min")
+  chestMax   Float?   @map("chest_max")
+  waistMin   Float?   @map("waist_min")
+  waistMax   Float?   @map("waist_max")
+  hipMin     Float?   @map("hip_min")
+  hipMax     Float?   @map("hip_max")
+  inseamMin  Float?   @map("inseam_min")
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  brand      Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@index([brandId, category])
+  @@unique([brandId, category, sizeLabel])
+  @@map("size_charts")
+}
+
+model TryOnCase {
+  id            Int           @id @default(autoincrement())
+  productName   String
+  heightCm      Int
+  weightKg      Int
+  waistCm       Int
+  suggestedSize String
+  actualSize    String?
+  fitPreference FitPreference?
+  isLabeled     Boolean       @default(false)
+  source        String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  labels        TryOnLabel[]
+
+  @@index([isLabeled, createdAt])
+  @@index([productName])
+  @@index([suggestedSize])
+  @@index([actualSize])
+}
+
+model TryOnLabel {
+  id            Int           @id @default(autoincrement())
+  caseId        Int
+  selectedSize  String
+  fitPreference FitPreference
+  createdAt     DateTime      @default(now())
+
+  tryOnCase     TryOnCase     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([selectedSize])
+  @@index([fitPreference])
+}
