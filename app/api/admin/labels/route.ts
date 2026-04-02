@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { type FitPreference } from "@prisma/client";
 
-import { db } from "@/lib/db";
 import { adminFiltersSchema } from "@/lib/validators";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +10,7 @@ export const fetchCache = "force-no-store";
 
 export async function GET(request: NextRequest) {
   try {
+    const { db } = await import("@/lib/db");
     const { searchParams } = new URL(request.url);
     const parsed = adminFiltersSchema.safeParse({
       productName: searchParams.get("productName") ?? "",

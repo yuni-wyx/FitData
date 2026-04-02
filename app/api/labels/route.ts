@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { db } from "@/lib/db";
 import { labelSubmissionSchema } from "@/lib/validators";
 
 export const dynamic = "force-dynamic";
@@ -10,6 +9,7 @@ export const fetchCache = "force-no-store";
 
 export async function POST(request: NextRequest) {
   try {
+    const { db } = await import("@/lib/db");
     const json = await request.json();
     const parsed = labelSubmissionSchema.safeParse(json);
 
